@@ -1,0 +1,16 @@
+ROC-AUC Score: 0.7426
+
+--- CODE_GENDER (Max-Min Rate Gap: 0.7414) ---
+             Count  High_Risk_Rate  Avg_Prob
+CODE_GENDER                                 
+F            40561        0.258647  0.376278
+M            20940        0.441738  0.463420
+XNA              2        1.000000  0.583641
+
+--- AGE_GROUP (Max-Min Rate Gap: 0.4201) ---
+           Count  High_Risk_Rate  Avg_Prob
+AGE_GROUP                                 
+18-25       3235        0.556414  0.520899
+26-40      23852        0.426379  0.458227
+41-60      28476        0.244522  0.368775
+60+         5940        0.136364  0.311690

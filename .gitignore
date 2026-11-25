@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.env
+*.zip
+data/*.csv
+models/test_predictions.csv
+reports/human_review_log.csv

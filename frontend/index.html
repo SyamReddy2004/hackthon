@@ -1,0 +1,915 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PS173 Credit Fairness Reviewer</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      max-width: 980px;
+      margin: 24px auto;
+      padding: 0 16px;
+      color: #1f2937;
+      background: #f3f4f6;
+      line-height: 1.5;
+    }
+
+    h1 {
+      font-size: 1.45rem;
+      margin-bottom: 8px;
+    }
+
+    h2 {
+      font-size: 1.12rem;
+      margin: 0 0 8px 0;
+    }
+
+    h3 {
+      font-size: 0.96rem;
+      margin: 0 0 8px 0;
+    }
+
+    .banner {
+      background: #fef3c7;
+      border: 1px solid #f59e0b;
+      color: #92400e;
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+    }
+
+    .stepper {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .step-tab {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #4b5563;
+      font-weight: 600;
+      font-size: 0.9rem;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .step-tab.active {
+      background: #2563eb;
+      color: #ffffff;
+      border-color: #2563eb;
+    }
+
+    .step-page {
+      display: none;
+    }
+
+    .step-page.active {
+      display: block;
+    }
+
+    .card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      padding: 18px;
+      margin-bottom: 16px;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+
+    .metric {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      padding: 10px 12px;
+      border-radius: 6px;
+    }
+
+    .metric-label {
+      font-size: 0.78rem;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+    }
+
+    .metric-value {
+      font-size: 1.2rem;
+      font-weight: 700;
+      margin-top: 2px;
+      color: #111827;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+      font-size: 0.88rem;
+    }
+
+    th,
+    td {
+      border: 1px solid #e5e7eb;
+      padding: 7px 10px;
+      text-align: left;
+    }
+
+    th {
+      background: #f9fafb;
+      font-weight: 600;
+      color: #374151;
+    }
+
+    .row {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+      margin-bottom: 10px;
+    }
+
+    .nav-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 12px;
+    }
+
+    input,
+    select,
+    button {
+      padding: 7px 11px;
+      border: 1px solid #d1d5db;
+      border-radius: 5px;
+      font-size: 0.9rem;
+    }
+
+    button {
+      background: #2563eb;
+      color: #fff;
+      border-color: #2563eb;
+      cursor: pointer;
+    }
+
+    button.secondary {
+      background: #ffffff;
+      color: #1f2937;
+      border-color: #d1d5db;
+    }
+
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .badge-high {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .badge-mod {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    .badge-low {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      padding: 10px 12px;
+      border-radius: 6px;
+      margin-top: 10px;
+      font-size: 0.9rem;
+    }
+
+    .decision-box {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 12px;
+      margin: 10px 0 14px 0;
+    }
+
+    .reason-panel {
+      border-radius: 6px;
+      padding: 12px 14px;
+    }
+
+    .reason-accept {
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+    }
+
+    .reason-reject {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+    }
+
+    .reason-list {
+      padding-left: 18px;
+      margin: 6px 0 0 0;
+      font-size: 0.9rem;
+    }
+
+    .reason-list li {
+      margin-bottom: 6px;
+    }
+
+    .profile-strip {
+      display: flex;
+      gap: 14px;
+      flex-wrap: wrap;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 8px 12px;
+      font-size: 0.84rem;
+      color: #374151;
+      margin-top: 12px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+      margin: 10px 0;
+    }
+
+    .form-grid label {
+      display: flex;
+      flex-direction: column;
+      font-size: 0.82rem;
+      color: #374151;
+      gap: 4px;
+    }
+
+    .muted {
+      color: #6b7280;
+      font-size: 0.85rem;
+    }
+
+    .chart-box {
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      padding: 12px;
+      background: #fcfcfd;
+      margin-top: 10px;
+      overflow-x: auto;
+    }
+
+    .legend {
+      display: flex;
+      gap: 14px;
+      font-size: 0.8rem;
+      color: #4b5563;
+      margin-bottom: 6px;
+      flex-wrap: wrap;
+    }
+
+    .dot {
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 2px;
+      margin-right: 4px;
+    }
+
+    @media (max-width: 720px) {
+
+      .grid-4,
+      .grid-2,
+      .form-grid,
+      .decision-box {
+        grid-template-columns: 1fr;
+      }
+
+      .stepper {
+        flex-direction: column;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <h1>Credit Fairness &amp; Explainability Workbench</h1>
+  <div class="banner">
+    <strong>Mandatory Policy Guardrail:</strong> Automated lending decisions are PROHIBITED. All model outputs are
+    advisory risk flags requiring human credit officer review.
+  </div>
+
+  <!-- Step Navigation Bar -->
+  <div class="stepper">
+    <button type="button" class="step-tab active" id="tab-1" onclick="goToStep(1)">1. Upload Dataset</button>
+    <button type="button" class="step-tab" id="tab-2" onclick="goToStep(2)">2. Parameter Tuning</button>
+    <button type="button" class="step-tab" id="tab-3" onclick="goToStep(3)">3. Results &amp; Review</button>
+  </div>
+
+  <!-- PAGE 1: DATASET UPLOAD -->
+  <div id="page-1" class="step-page active">
+    <div class="card">
+      <h2>Step 1: Upload Dataset</h2>
+      <p class="muted" style="margin-top:0;">Upload a credit CSV dataset (must include a binary <code>TARGET</code>
+        column) or use the built-in Home Credit dataset.</p>
+      <div class="row">
+        <input type="file" id="csv-file" accept=".csv" />
+        <button onclick="uploadDataset()">Upload CSV</button>
+        <button class="secondary" onclick="useDefaultDataset()">Use Built-in Default Dataset</button>
+      </div>
+      <div id="upload-status" class="muted"></div>
+      <div id="dataset-summary" class="info-box">Checking dataset status...</div>
+
+      <div class="nav-footer">
+        <span></span>
+        <button onclick="goToStep(2)">Next: Parameter Tuning &rarr;</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 2: PARAMETER TUNING -->
+  <div id="page-2" class="step-page">
+    <div class="card">
+      <h2>Step 2: Parameter Tuning &amp; Model Training</h2>
+      <p class="muted" style="margin-top:0;">Configure model hyperparameters and the advisory decision threshold, then
+        train on the active dataset.</p>
+      <div id="tuning-dataset-note" class="muted" style="margin-bottom: 10px;"></div>
+
+      <div class="form-grid">
+        <label>Max Rows (for fast tuning)
+          <select id="p-max-rows">
+            <option value="10000">10,000 rows (fastest)</option>
+            <option value="25000" selected>25,000 rows (balanced)</option>
+            <option value="50000">50,000 rows</option>
+            <option value="0">All rows</option>
+          </select>
+        </label>
+        <label>Test Split Ratio
+          <input type="number" id="p-test-size" value="0.20" min="0.1" max="0.4" step="0.05" />
+        </label>
+        <label>Decision Threshold
+          <select id="p-threshold">
+            <option value="auto" selected>Auto (Optimize Precision &amp; Recall)</option>
+            <option value="0.20">0.20</option>
+            <option value="0.30">0.30</option>
+            <option value="0.50">0.50</option>
+          </select>
+        </label>
+        <label>Trees (n_estimators)
+          <input type="number" id="p-estimators" value="150" min="20" max="500" step="10" />
+        </label>
+        <label>Max Depth
+          <input type="number" id="p-depth" value="5" min="2" max="12" step="1" />
+        </label>
+        <label>Learning Rate
+          <input type="number" id="p-lr" value="0.05" min="0.01" max="0.5" step="0.01" />
+        </label>
+        <label>Class Weighting Mode
+          <select id="p-class-weight">
+            <option value="calibrated" selected>Calibrated (High Accuracy)</option>
+            <option value="mild">Mild Balance (Balanced F1)</option>
+            <option value="balanced">Full Balance (High Recall)</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="row">
+        <button id="train-next-btn" onclick="trainModel()">Train &amp; Go to Results &rarr;</button>
+        <span id="train-status" class="muted"></span>
+      </div>
+
+      <div class="nav-footer">
+        <button class="secondary" onclick="goToStep(1)">&larr; Back: Upload Dataset</button>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <!-- PAGE 3: CLEAR RESULTS & REVIEW -->
+  <div id="page-3" class="step-page">
+
+    <!-- Card 1: Overall Summary -->
+    <div class="card">
+      <div class="row" style="justify-content: space-between; margin-bottom: 10px;">
+        <h2 style="margin:0;">1. Overall Portfolio Results</h2>
+        <button class="secondary" onclick="loadResults()">Refresh Results</button>
+      </div>
+      <div class="grid-4">
+        <div class="metric">
+          <div class="metric-label">Test Records Audited</div>
+          <div class="metric-value" id="m-count">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Actual Default Rate</div>
+          <div class="metric-value" id="m-default">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Flagged for Review</div>
+          <div class="metric-value" id="m-flagged">-</div>
+        </div>
+        <div class="metric">
+          <div class="metric-label">Mean Risk Score</div>
+          <div class="metric-value" id="m-mean-risk">-</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Card 2: Group Fairness -->
+    <div class="card">
+      <div class="row" style="justify-content: space-between;">
+        <div>
+          <h2 style="margin:0;">2. Group Fairness Check</h2>
+          <div class="muted">Checks whether the model flags one demographic group more often than another.</div>
+        </div>
+        <select id="fairness-group" onchange="loadFairness()">
+          <option value="CODE_GENDER">By Gender (CODE_GENDER)</option>
+          <option value="AGE_GROUP">By Age Group (AGE_GROUP)</option>
+        </select>
+      </div>
+
+      <div id="fairness-takeaway" class="info-box">Loading fairness summary...</div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Group</th>
+            <th>Applicants</th>
+            <th>Flagged for Review (%)</th>
+            <th>Actual Default (%)</th>
+            <th>False-Positive Rate (%)</th>
+          </tr>
+        </thead>
+        <tbody id="fairness-tbody"></tbody>
+      </table>
+
+      <div class="chart-box">
+        <div class="legend">
+          <span><span class="dot" style="background:#2563eb;"></span>Flagged (%)</span>
+          <span><span class="dot" style="background:#f59e0b;"></span>Actual Default (%)</span>
+          <span><span class="dot" style="background:#dc2626;"></span>False-Positive Rate (%)</span>
+        </div>
+        <div id="fairness-chart"></div>
+      </div>
+      <div id="fairlearn-metrics" class="muted" style="margin-top:8px;"></div>
+    </div>
+
+    <!-- Card 3: Applicant Decision & Reasons -->
+    <div class="card">
+      <h2>3. Individual Applicant Review &amp; Reasons</h2>
+      <div class="row">
+        <label class="muted">Test Row Index:
+          <input type="number" id="row-index" value="0" min="0" style="width: 90px;" />
+        </label>
+        <button onclick="loadApplicant()">Inspect Row</button>
+        <button class="secondary" onclick="loadSample(1)">Random High-Risk</button>
+        <button class="secondary" onclick="loadSample(0)">Random Low-Risk</button>
+        <button class="secondary" onclick="toggleCustomForm()">Score Custom Applicant</button>
+      </div>
+
+      <div id="custom-form-wrap"
+        style="display:none; background:#f9fafb; border:1px solid #e5e7eb; border-radius:6px; padding:12px; margin-bottom:12px;">
+        <div class="muted">Enter custom applicant details to score with the active model:</div>
+        <div class="form-grid" style="grid-template-columns: repeat(4, 1fr);">
+          <label>Gender <select id="c-gender">
+              <option value="F">F</option>
+              <option value="M">M</option>
+            </select></label>
+          <label>Age Group <select id="c-age">
+              <option value="18-25">18-25</option>
+              <option value="26-40" selected>26-40</option>
+              <option value="41-60">41-60</option>
+              <option value="60+">60+</option>
+            </select></label>
+          <label>Annual Income <input type="number" id="c-income" value="150000" /></label>
+          <label>Loan Credit <input type="number" id="c-credit" value="500000" /></label>
+          <label>Loan Annuity <input type="number" id="c-annuity" value="25000" /></label>
+          <label>Days Employed <input type="number" id="c-days-emp" value="-1200" /></label>
+          <label>EXT_SOURCE_2 <input type="number" id="c-ext2" step="0.01" min="0" max="1" value="0.55" /></label>
+          <label>EXT_SOURCE_3 <input type="number" id="c-ext3" step="0.01" min="0" max="1" value="0.50" /></label>
+        </div>
+        <button onclick="scoreCustomApplicant()">Run Model &amp; Show Reasons</button>
+      </div>
+
+      <div class="decision-box">
+        <div>
+          <div class="metric-label">Applicant</div>
+          <div class="metric-value" style="font-size:1.05rem;" id="a-source">-</div>
+        </div>
+        <div>
+          <div class="metric-label">Predicted Default Risk</div>
+          <div class="metric-value" style="font-size:1.05rem;"><span id="a-risk">-</span> <span id="a-tier"
+              class="badge">-</span></div>
+        </div>
+        <div>
+          <div class="metric-label">Advisory Recommendation</div>
+          <div class="metric-value" style="font-size:1.05rem;" id="a-dir">-</div>
+        </div>
+        <div>
+          <div class="metric-label">Actual Historical Outcome</div>
+          <div class="metric-value" style="font-size:1.05rem;" id="a-actual">-</div>
+        </div>
+      </div>
+
+      <div class="grid-2">
+        <div class="reason-panel reason-accept">
+          <h3 style="color:#166534;">Why It Leans Toward Acceptance</h3>
+          <ul id="a-accept" class="reason-list"></ul>
+        </div>
+        <div class="reason-panel reason-reject">
+          <h3 style="color:#991b1b;">Why It Leans Toward Rejection / Review</h3>
+          <ul id="a-reject" class="reason-list"></ul>
+        </div>
+      </div>
+
+      <div id="a-fairness-note" class="info-box" style="display:none; background:#fffbeb; border-color:#fcd34d; color:#92400e;"></div>
+      <div id="a-profile" class="profile-strip"></div>
+    </div>
+
+    <!-- Card 4: Human Credit Officer Sign-Off -->
+    <div class="card">
+      <h2>4. Human Credit Officer Sign-Off</h2>
+      <p class="muted" style="margin-top:0;">Record your final human decision for the selected applicant above.</p>
+      <div class="row">
+        <label class="muted">Final Decision:
+          <select id="human-decision">
+            <option value="Approve Loan">Approve Loan</option>
+            <option value="Hold for Verification" selected>Hold for Verification</option>
+            <option value="Reject Loan">Reject Loan</option>
+          </select>
+        </label>
+        <input type="text" id="reviewer-note" placeholder="Add brief reviewer reason/note (optional)"
+          style="flex: 1; min-width: 220px;" />
+        <button onclick="saveReview()">Save Human Decision</button>
+        <button class="secondary" onclick="downloadReport('pdf')">📄 Download Audit Report (PDF)</button>
+      </div>
+      <div id="review-status" class="muted" style="margin-bottom:6px;"></div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Timestamp</th>
+            <th>Applicant</th>
+            <th>Risk Score</th>
+            <th>Model Flag</th>
+            <th>Human Decision</th>
+            <th>Reviewer Note</th>
+          </tr>
+        </thead>
+        <tbody id="reviews-tbody"></tbody>
+      </table>
+
+      <div class="nav-footer">
+        <button class="secondary" onclick="goToStep(2)">&larr; Back: Parameter Tuning</button>
+        <button class="secondary" onclick="goToStep(1)">Start Over (Step 1)</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentApplicant = null;
+
+    function goToStep(step) {
+      for (let i = 1; i <= 3; i++) {
+        document.getElementById(`page-${i}`).classList.toggle("active", i === step);
+        document.getElementById(`tab-${i}`).classList.toggle("active", i === step);
+      }
+      if (step === 3) {
+        loadResults().catch(console.error);
+      }
+    }
+
+    async function fetchJSON(url, options) {
+      const res = await fetch(url, options);
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || `HTTP ${res.status}`);
+      return data;
+    }
+
+    function renderDatasetSummary(ds) {
+      const box = document.getElementById("dataset-summary");
+      const note = document.getElementById("tuning-dataset-note");
+      if (!ds.loaded) {
+        box.textContent = "No dataset loaded yet. Upload a CSV or click 'Use Built-in Default Dataset'.";
+        note.textContent = "No dataset loaded yet.";
+        return;
+      }
+      const text =
+        `Active Dataset: ${ds.filename} | Rows: ${ds.rows.toLocaleString()} | ` +
+        `Columns: ${ds.columns} | Default Rate: ${ds.target_default_rate_pct}% | ` +
+        `Sensitive Attrs: ${(ds.sensitive_columns || []).join(", ") || "None"}`;
+      box.textContent = text;
+      note.textContent = text;
+    }
+
+    async function loadDatasetStatus() {
+      const ds = await fetchJSON("/api/dataset/status");
+      renderDatasetSummary(ds);
+    }
+
+    async function uploadDataset() {
+      const fileInput = document.getElementById("csv-file");
+      if (!fileInput.files.length) {
+        alert("Please select a CSV file first.");
+        return;
+      }
+      const statusEl = document.getElementById("upload-status");
+      statusEl.textContent = "Uploading and validating CSV...";
+      try {
+        const fd = new FormData();
+        fd.append("file", fileInput.files[0]);
+        const ds = await fetchJSON("/api/dataset/upload", { method: "POST", body: fd });
+        renderDatasetSummary(ds);
+        statusEl.textContent = "Uploaded! Click 'Next: Parameter Tuning' to continue.";
+      } catch (err) {
+        statusEl.textContent = "Upload error: " + err.message;
+      }
+    }
+
+    async function useDefaultDataset() {
+      const statusEl = document.getElementById("upload-status");
+      statusEl.textContent = "Loading default dataset...";
+      try {
+        const ds = await fetchJSON("/api/dataset/default", { method: "POST" });
+        renderDatasetSummary(ds);
+        statusEl.textContent = "Default dataset loaded! Click 'Next: Parameter Tuning' to continue.";
+      } catch (err) {
+        statusEl.textContent = "Error: " + err.message;
+      }
+    }
+
+    async function trainModel() {
+      const btn = document.getElementById("train-next-btn");
+      const statusEl = document.getElementById("train-status");
+      btn.disabled = true;
+      statusEl.textContent = "Training model...";
+      try {
+        const threshVal = document.getElementById("p-threshold").value;
+        const payload = {
+          max_rows: parseInt(document.getElementById("p-max-rows").value, 10),
+          test_size: parseFloat(document.getElementById("p-test-size").value),
+          decision_threshold: threshVal === "auto" ? "auto" : parseFloat(threshVal),
+          n_estimators: parseInt(document.getElementById("p-estimators").value, 10),
+          max_depth: parseInt(document.getElementById("p-depth").value, 10),
+          learning_rate: parseFloat(document.getElementById("p-lr").value),
+          class_weight_mode: document.getElementById("p-class-weight").value,
+        };
+        await fetchJSON("/api/train", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+        statusEl.textContent = "";
+        goToStep(3);
+      } catch (err) {
+        statusEl.textContent = "Training failed: " + err.message;
+      } finally {
+        btn.disabled = false;
+      }
+    }
+
+    function renderFairnessChart(groups) {
+      const el = document.getElementById("fairness-chart");
+      if (!groups || !groups.length) {
+        el.innerHTML = `<div class="muted">No group data available.</div>`;
+        return;
+      }
+      const maxVal = Math.max(10, ...groups.flatMap(g => [g.flagged_pct, g.actual_default_pct, g.false_positive_rate_pct]));
+      const rowH = 62;
+      const w = 780;
+      const labelW = 90;
+      const barAreaW = w - labelW - 70;
+      const h = groups.length * rowH + 10;
+
+      const bars = groups.map((g, idx) => {
+        const y0 = idx * rowH + 8;
+        const w1 = (g.flagged_pct / maxVal) * barAreaW;
+        const w2 = (g.actual_default_pct / maxVal) * barAreaW;
+        const w3 = (g.false_positive_rate_pct / maxVal) * barAreaW;
+        return `
+          <text x="0" y="${y0 + 24}" font-size="13" font-weight="600" fill="#1f2937">${g.group}</text>
+          <text x="0" y="${y0 + 40}" font-size="11" fill="#6b7280">n=${g.applicants.toLocaleString()}</text>
+          <rect x="${labelW}" y="${y0}" width="${w1}" height="12" rx="2" fill="#2563eb"></rect>
+          <text x="${labelW + w1 + 6}" y="${y0 + 10}" font-size="11" fill="#1f2937">${g.flagged_pct}%</text>
+          <rect x="${labelW}" y="${y0 + 16}" width="${w2}" height="12" rx="2" fill="#f59e0b"></rect>
+          <text x="${labelW + w2 + 6}" y="${y0 + 26}" font-size="11" fill="#1f2937">${g.actual_default_pct}%</text>
+          <rect x="${labelW}" y="${y0 + 32}" width="${w3}" height="12" rx="2" fill="#dc2626"></rect>
+          <text x="${labelW + w3 + 6}" y="${y0 + 42}" font-size="11" fill="#1f2937">${g.false_positive_rate_pct}%</text>
+        `;
+      }).join("");
+
+      el.innerHTML = `<svg width="100%" viewBox="0 0 ${w} ${h}">${bars}</svg>`;
+    }
+
+    async function loadOverview() {
+      const data = await fetchJSON("/api/overview");
+      document.getElementById("m-count").textContent = data.applications_audited.toLocaleString();
+      document.getElementById("m-default").textContent = `${data.actual_default_rate_pct}%`;
+      document.getElementById("m-flagged").textContent = `${data.flagged_for_review_pct}%`;
+      document.getElementById("m-mean-risk").textContent = `${data.mean_risk_score_pct}%`;
+    }
+
+    async function loadFairness() {
+      const group = document.getElementById("fairness-group").value;
+      const data = await fetchJSON(`/api/fairness?group_by=${encodeURIComponent(group)}`);
+      document.getElementById("fairness-takeaway").textContent = data.takeaway;
+
+      const tbody = document.getElementById("fairness-tbody");
+      tbody.innerHTML = (data.groups || []).map(g => `
+        <tr>
+          <td><strong>${g.group}</strong></td>
+          <td>${g.applicants.toLocaleString()}</td>
+          <td>${g.flagged_pct}%</td>
+          <td>${g.actual_default_pct}%</td>
+          <td>${g.false_positive_rate_pct}%</td>
+        </tr>
+      `).join("");
+
+      renderFairnessChart(data.groups);
+
+      const fl = data.fairlearn_metrics || {};
+      document.getElementById("fairlearn-metrics").textContent = Object.keys(fl).length
+        ? `Fairlearn — Demographic Parity Diff: ${fl.demographic_parity_difference} (0 = equal) | Parity Ratio: ${fl.demographic_parity_ratio} (1 = equal) | Equalized Odds Diff: ${fl.equalized_odds_difference}`
+        : "";
+    }
+
+    function cleanReasonText(summary) {
+      return summary.replace(/\s*\(SHAP [^)]+\)/, "");
+    }
+
+    function renderApplicant(data) {
+      currentApplicant = data;
+      document.getElementById("a-source").textContent = data.row_index !== null ? `Test Row #${data.row_index}` : "Custom Applicant";
+      document.getElementById("a-risk").textContent = `${data.risk_percentage}%`;
+      const tierEl = document.getElementById("a-tier");
+      tierEl.textContent = data.risk_tier;
+      tierEl.className = "badge " + (
+        data.risk_tier === "High Risk" ? "badge-high" :
+          data.risk_tier === "Moderate Risk" ? "badge-mod" : "badge-low"
+      );
+      document.getElementById("a-dir").textContent = data.advisory_direction;
+      document.getElementById("a-actual").textContent = data.historical_outcome || "N/A (Custom)";
+
+      const accEl = document.getElementById("a-accept");
+      accEl.innerHTML = data.acceptance_drivers.length
+        ? data.acceptance_drivers.map(d => `<li>${cleanReasonText(d.summary)}</li>`).join("")
+        : "<li>No strong risk-reducing factors stood out.</li>";
+
+      const rejEl = document.getElementById("a-reject");
+      rejEl.innerHTML = data.rejection_drivers.length
+        ? data.rejection_drivers.map(d => `<li>${cleanReasonText(d.summary)}</li>`).join("")
+        : "<li>No major risk red flags stood out.</li>";
+
+      const fnEl = document.getElementById("a-fairness-note");
+      const alerts = data.fairness_alerts || [];
+      if (alerts.length) {
+        fnEl.style.display = "block";
+        fnEl.innerHTML = alerts.map(a =>
+          `<div style="margin-bottom:8px;">` +
+          `<strong style="font-size:0.95rem;">⚠️ ${a.title}</strong><br/>` +
+          `<span style="color:#78350f;"><strong>Finding:</strong> ${a.finding}</span><br/>` +
+          `<span style="color:#1e40af;"><strong>Directive:</strong> ${a.directive}</span>` +
+          `</div>`
+        ).join(`<hr style="margin:6px 0;border-color:#fcd34d;"/>`);
+      } else {
+        fnEl.style.display = "none";
+        fnEl.textContent = "";
+      }
+
+      const f = data.applicant_features || {};
+      const fmtNum = v => (v === null || v === undefined) ? "N/A" : Number(v).toLocaleString(undefined, { maximumFractionDigits: 2 });
+      document.getElementById("a-profile").innerHTML = `
+        <span><strong>Gender:</strong> ${f.CODE_GENDER ?? "N/A"}</span>
+        <span><strong>Age:</strong> ${f.AGE_GROUP ?? "N/A"}</span>
+        <span><strong>Income:</strong> ${fmtNum(f.AMT_INCOME_TOTAL)}</span>
+        <span><strong>Credit:</strong> ${fmtNum(f.AMT_CREDIT)}</span>
+        <span><strong>Annuity:</strong> ${fmtNum(f.AMT_ANNUITY)}</span>
+        <span><strong>EXT_SOURCE_2:</strong> ${fmtNum(f.EXT_SOURCE_2)}</span>
+        <span><strong>EXT_SOURCE_3:</strong> ${fmtNum(f.EXT_SOURCE_3)}</span>
+      `;
+    }
+
+    async function loadApplicant() {
+      const idx = document.getElementById("row-index").value || 0;
+      const data = await fetchJSON(`/api/applicant/${idx}`);
+      renderApplicant(data);
+    }
+
+    async function loadSample(flagged) {
+      const data = await fetchJSON(`/api/applicant/sample?flagged=${flagged}`);
+      document.getElementById("row-index").value = data.row_index ?? 0;
+      renderApplicant(data);
+    }
+
+    function toggleCustomForm() {
+      const el = document.getElementById("custom-form-wrap");
+      el.style.display = el.style.display === "none" ? "block" : "none";
+    }
+
+    async function scoreCustomApplicant() {
+      const payload = {
+        CODE_GENDER: document.getElementById("c-gender").value,
+        AGE_GROUP: document.getElementById("c-age").value,
+        AMT_INCOME_TOTAL: parseFloat(document.getElementById("c-income").value),
+        AMT_CREDIT: parseFloat(document.getElementById("c-credit").value),
+        AMT_ANNUITY: parseFloat(document.getElementById("c-annuity").value),
+        DAYS_EMPLOYED: parseFloat(document.getElementById("c-days-emp").value),
+        EXT_SOURCE_2: parseFloat(document.getElementById("c-ext2").value),
+        EXT_SOURCE_3: parseFloat(document.getElementById("c-ext3").value),
+      };
+      const data = await fetchJSON("/api/predict", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload),
+      });
+      renderApplicant(data);
+    }
+
+    function renderReviews(reviews) {
+      const tbody = document.getElementById("reviews-tbody");
+      if (!reviews.length) {
+        tbody.innerHTML = `<tr><td colspan="6" class="muted">No human decisions saved yet.</td></tr>`;
+        return;
+      }
+      tbody.innerHTML = reviews.map(r => `
+        <tr>
+          <td>${r.timestamp}</td>
+          <td>${r.row_index === -1 ? "Custom" : "#" + r.row_index}</td>
+          <td>${(Number(r.probability) * 100).toFixed(1)}%</td>
+          <td>${r.advisory_flag === 1 ? "Flagged" : "Not Flagged"}</td>
+          <td><strong>${r.human_decision}</strong></td>
+          <td>${r.note || ""}</td>
+        </tr>
+      `).join("");
+    }
+
+    async function loadReviews() {
+      const data = await fetchJSON("/api/reviews");
+      renderReviews(data.reviews);
+    }
+
+    async function saveReview() {
+      if (!currentApplicant) return;
+      const decision = document.getElementById("human-decision").value;
+      const note = document.getElementById("reviewer-note").value;
+      const data = await fetchJSON("/api/reviews", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          row_index: currentApplicant.row_index,
+          probability: currentApplicant.risk_probability,
+          advisory_flag: currentApplicant.advisory_flag,
+          human_decision: decision,
+          note: note,
+          applicant_details: currentApplicant,
+        }),
+      });
+      const statusEl = document.getElementById("review-status");
+      statusEl.style.color = "#166534";
+      statusEl.textContent = `Saved "${decision}" for ${currentApplicant.row_index !== null ? "Test Row #" + currentApplicant.row_index : "Custom Applicant"}.`;
+      document.getElementById("reviewer-note").value = "";
+      renderReviews(data.reviews);
+    }
+
+    function downloadReport(fmt) {
+      const idx = currentApplicant && currentApplicant.row_index !== null ? currentApplicant.row_index : 0;
+      window.location.href = `/api/report?row_index=${idx}&format=${fmt}`;
+    }
+
+    async function loadResults() {
+      await Promise.all([loadOverview(), loadFairness(), loadApplicant(), loadReviews()]);
+    }
+
+    loadDatasetStatus().catch(console.error);
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,36 @@
+feature,mean_abs_shap
+numerical__EXT_SOURCE_3,0.41553208
+numerical__EXT_SOURCE_2,0.38301232
+numerical__DAYS_EMPLOYED,0.17033689
+numerical__AMT_ANNUITY,0.14182599
+numerical__AMT_CREDIT,0.14016612
+categorical__NAME_EDUCATION_TYPE_Higher education,0.105753735
+categorical__CODE_GENDER_F,0.089832805
+categorical__NAME_FAMILY_STATUS_Married,0.07085618
+categorical__CODE_GENDER_M,0.064214975
+categorical__AGE_GROUP_26-40,0.06062525
+numerical__AMT_INCOME_TOTAL,0.05687704
+categorical__NAME_EDUCATION_TYPE_Secondary / secondary special,0.044818766
+numerical__REGION_POPULATION_RELATIVE,0.035229683
+numerical__REGION_RATING_CLIENT_W_CITY,0.03522095
+categorical__NAME_HOUSING_TYPE_House / apartment,0.015461939
+categorical__NAME_FAMILY_STATUS_Single / not married,0.012851221
+categorical__AGE_GROUP_18-25,0.0116725145
+numerical__REGION_RATING_CLIENT,0.010815274
+categorical__AGE_GROUP_60+,0.009782817
+numerical__CNT_FAM_MEMBERS,0.008498629
+categorical__AGE_GROUP_41-60,0.008419207
+numerical__CNT_CHILDREN,0.007550932
+categorical__NAME_FAMILY_STATUS_Civil marriage,0.005749568
+categorical__NAME_EDUCATION_TYPE_Lower secondary,0.005580382
+categorical__NAME_HOUSING_TYPE_Office apartment,0.0048305118
+categorical__NAME_EDUCATION_TYPE_Incomplete higher,0.0044715507
+categorical__NAME_HOUSING_TYPE_Municipal apartment,0.003966953
+categorical__NAME_HOUSING_TYPE_Rented apartment,0.00366515
+categorical__NAME_FAMILY_STATUS_Widow,0.003528298
+categorical__NAME_FAMILY_STATUS_Separated,0.0027582392
+categorical__NAME_HOUSING_TYPE_With parents,0.000825429
+categorical__NAME_HOUSING_TYPE_Co-op apartment,0.00046397143
+categorical__NAME_EDUCATION_TYPE_Academic degree,0.00034925895
+categorical__CODE_GENDER_XNA,0.0
+categorical__NAME_FAMILY_STATUS_Unknown,0.0
